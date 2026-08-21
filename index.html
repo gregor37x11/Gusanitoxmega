@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Gusanitoxmega</title>
+    <meta name="theme-color" content="#39ff88">
+    <meta name="description" content="Juego del gusanito para Daniela con mensaje especial">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- MENU INICIAL -->
+    <div id="menu">
+        <h1>🐍 Gusanitoxmega</h1>
+        <p>El juego del gusanito</p>
+        <button onclick="startGame()">
+            🎮 JUGAR
+        </button>
+    </div>
+
+    <!-- AREA DEL JUEGO -->
+    <div id="gameUI" class="hidden">
+        <div class="top">
+            <span id="score">Puntos: 0</span>
+            <span id="record">Récord: 0</span>
+        </div>
+
+        <canvas id="game" width="360" height="360"></canvas>
+
+        <div class="controls">
+            <button onclick="changeDir('up')">⬆️</button>
+            <br>
+            <button onclick="changeDir('left')">⬅️</button>
+            <button id="pauseBtn" onclick="pauseGame()">⏸️</button>
+            <button onclick="changeDir('right')">➡️</button>
+            <br>
+            <button onclick="changeDir('down')">⬇️</button>
+        </div>
+    </div>
+
+    <!-- PANTALLA DE FIN DEL JUEGO CON MENSAJE ESPECIAL -->
+    <div id="gameOver" class="hidden">
+        <div class="animated-heart">❤️</div>
+        <h2 class="inspiring-text">
+            Daniela tú eres una mujer Fuerte y Podrás lograrlo, con la ayuda de Dios
+        </h2>
+        <p id="finalScore"></p>
+        <button onclick="startGame()">
+            🔄 JUGAR DE NUEVO
+        </button>
+    </div>
+
+    <script src="game.js" defer></script>
+
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("service-worker.js")
+                    .then(reg => console.log("PWA lista registrada:", reg))
+                    .catch(err => console.log("Error SW:", err));
+            });
+        }
+    </script>
+
+</body>
+
+</html>
