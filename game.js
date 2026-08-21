@@ -1,9 +1,7 @@
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
-
 const size = 18;
-
 
 let snake = [];
 let food = {};
@@ -13,11 +11,10 @@ let direction = "right";
 let score = 0;
 let record = localStorage.getItem("record") || 0;
 
-let speed = 120;
-
-let gameLoop;
+let gameLoop = null;
 
 let paused = false;
+let playing = false;
 
 
 
@@ -28,7 +25,6 @@ document.getElementById("record").innerHTML =
 
 function startGame(){
 
-
 document.getElementById("menu").classList.add("hidden");
 
 document.getElementById("gameOver").classList.add("hidden");
@@ -36,8 +32,7 @@ document.getElementById("gameOver").classList.add("hidden");
 document.getElementById("gameUI").classList.remove("hidden");
 
 
-
-snake=[
+snake = [
 
 {x:180,y:180},
 
@@ -52,13 +47,16 @@ direction="right";
 
 score=0;
 
-speed=120;
-
 paused=false;
 
+playing=true;
 
-document.getElementById("score").innerHTML=
+
+document.getElementById("score").innerHTML =
 "Puntos: 0";
+
+
+document.getElementById("pauseBtn").innerHTML="⏸";
 
 
 food=createFood();
@@ -67,8 +65,7 @@ food=createFood();
 
 clearInterval(gameLoop);
 
-
-gameLoop=setInterval(update,speed);
+gameLoop=setInterval(update,120);
 
 
 }
@@ -90,8 +87,34 @@ y:Math.floor(Math.random()*18+1)*size
 
 
 
+function pauseGame(){
+
+if(!playing)return;
+
+
+paused=!paused;
+
+
+if(paused){
+
+document.getElementById("pauseBtn").innerHTML="▶";
+
+}else{
+
+document.getElementById("pauseBtn").innerHTML="⏸";
+
+}
+
+}
+
+
+
+
 
 function changeDir(newDir){
+
+
+if(!playing)return;
 
 
 if(newDir==="left" && direction!=="right")
@@ -115,20 +138,10 @@ direction="down";
 
 
 
-function pauseGame(){
-
-paused=!paused;
-
-}
-
-
-
-
 function update(){
 
 
-if(paused)
-return;
+if(paused)return;
 
 
 
@@ -153,7 +166,6 @@ head.y+=size;
 
 
 
-// choque paredes
 
 if(
 
@@ -167,7 +179,7 @@ head.y>=360
 
 ){
 
-endGame();
+gameOver();
 
 return;
 
@@ -175,20 +187,19 @@ return;
 
 
 
-
-// choque cuerpo
 
 for(let part of snake){
 
 if(head.x===part.x && head.y===part.y){
 
-endGame();
+gameOver();
 
 return;
 
 }
 
 }
+
 
 
 
@@ -196,39 +207,15 @@ snake.unshift(head);
 
 
 
-if(
-
-head.x===food.x &&
-
-head.y===food.y
-
-){
-
+if(head.x===food.x && head.y===food.y){
 
 score++;
-
 
 document.getElementById("score").innerHTML=
 "Puntos: "+score;
 
 
-
-// subir nivel
-
-if(score%5===0 && speed>50){
-
-speed-=10;
-
-clearInterval(gameLoop);
-
-gameLoop=setInterval(update,speed);
-
-}
-
-
-
 food=createFood();
-
 
 
 }else{
@@ -243,7 +230,6 @@ snake.pop();
 
 draw();
 
-
 }
 
 
@@ -257,8 +243,6 @@ ctx.clearRect(0,0,360,360);
 
 
 
-// fondo
-
 ctx.fillStyle="#071015";
 
 ctx.fillRect(0,0,360,360);
@@ -266,12 +250,46 @@ ctx.fillRect(0,0,360,360);
 
 
 
-// dibujar gusano
+
+// FRUTA
+
+ctx.beginPath();
+
+ctx.arc(
+food.x,
+food.y,
+9,
+0,
+Math.PI*2
+);
+
+ctx.fillStyle="red";
+
+ctx.fill();
+
+
+
+
+// GUSANO
 
 snake.forEach((part,index)=>{
 
 
 ctx.beginPath();
+
+
+let radio;
+
+
+if(index===0){
+
+radio=10;
+
+}else{
+
+radio=8-index*0.1;
+
+}
 
 
 ctx.arc(
@@ -280,7 +298,7 @@ part.x,
 
 part.y,
 
-size/2,
+radio,
 
 0,
 
@@ -296,13 +314,12 @@ ctx.fillStyle="#9cff00";
 
 }else{
 
-ctx.fillStyle="#25d000";
+ctx.fillStyle="#28d000";
 
 }
 
 
 ctx.fill();
-
 
 
 });
@@ -311,8 +328,7 @@ ctx.fill();
 
 
 
-// ojos de la cabeza
-
+// OJOS
 
 let head=snake[0];
 
@@ -320,56 +336,51 @@ let head=snake[0];
 ctx.fillStyle="black";
 
 
+let eye1;
+let eye2;
+
+
+
+if(direction==="right"){
+
+eye1={x:head.x+5,y:head.y-5};
+eye2={x:head.x+5,y:head.y+5};
+
+}
+
+
+if(direction==="left"){
+
+eye1={x:head.x-5,y:head.y-5};
+eye2={x:head.x-5,y:head.y+5};
+
+}
+
+
+
+if(direction==="up"){
+
+eye1={x:head.x-5,y:head.y-5};
+eye2={x:head.x+5,y:head.y-5};
+
+}
+
+
+
+if(direction==="down"){
+
+eye1={x:head.x-5,y:head.y+5};
+eye2={x:head.x+5,y:head.y+5};
+
+}
+
+
+
 ctx.beginPath();
 
+ctx.arc(eye1.x,eye1.y,2.5,0,Math.PI*2);
 
-ctx.arc(
-head.x-5,
-head.y-5,
-3,
-0,
-Math.PI*2
-);
-
-
-ctx.arc(
-head.x+5,
-head.y-5,
-3,
-0,
-Math.PI*2
-);
-
-
-ctx.fill();
-
-
-
-
-
-// fruta
-
-
-ctx.fillStyle="red";
-
-
-ctx.beginPath();
-
-
-ctx.arc(
-
-food.x,
-
-food.y,
-
-8,
-
-0,
-
-Math.PI*2
-
-);
-
+ctx.arc(eye2.x,eye2.y,2.5,0,Math.PI*2);
 
 ctx.fill();
 
@@ -381,11 +392,12 @@ ctx.fill();
 
 
 
-function endGame(){
+function gameOver(){
 
 
 clearInterval(gameLoop);
 
+playing=false;
 
 
 if(score>record){
@@ -400,21 +412,18 @@ record
 }
 
 
-
 document.getElementById("record").innerHTML=
 "Récord: "+record;
 
 
-document.getElementById("gameUI").classList.add("hidden");
 
+document.getElementById("gameUI").classList.add("hidden");
 
 document.getElementById("gameOver").classList.remove("hidden");
 
 
 document.getElementById("finalScore").innerHTML=
-
-"Puntuación: "+score;
-
+"Puntos: "+score;
 
 
 }
@@ -422,13 +431,8 @@ document.getElementById("finalScore").innerHTML=
 
 
 
-// teclado PC
 
-document.addEventListener(
-
-"keydown",
-
-e=>{
+document.addEventListener("keydown",e=>{
 
 
 if(e.key==="ArrowUp")
@@ -447,81 +451,4 @@ if(e.key==="ArrowRight")
 changeDir("right");
 
 
-}
-
-);
-
-
-
-
-
-// controles por deslizar dedo
-
-let startX=0;
-let startY=0;
-
-
-canvas.addEventListener(
-
-"touchstart",
-
-e=>{
-
-
-startX=e.touches[0].clientX;
-
-startY=e.touches[0].clientY;
-
-
-}
-
-);
-
-
-
-canvas.addEventListener(
-
-"touchend",
-
-e=>{
-
-
-let endX=e.changedTouches[0].clientX;
-
-let endY=e.changedTouches[0].clientY;
-
-
-
-let dx=endX-startX;
-
-let dy=endY-startY;
-
-
-
-if(Math.abs(dx)>Math.abs(dy)){
-
-
-if(dx>0)
-changeDir("right");
-
-else
-changeDir("left");
-
-
-}else{
-
-
-if(dy>0)
-changeDir("down");
-
-else
-changeDir("up");
-
-
-}
-
-
-
-}
-
-);
+});
