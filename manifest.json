@@ -1,1 +1,24 @@
-{"name":"Gusanito App","short_name":"Gusanito","start_url":"index.html","display":"standalone","background_color":"#111","theme_color":"#00ff00"}
+{
+  "name": "Gusanitoxmega",
+  "short_name": "Gusanito",
+  "description": "Juego arcade de gusanito para Android",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#101820",
+  "theme_color": "#39ff88",
+
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
