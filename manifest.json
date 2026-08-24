@@ -1,27 +1,23 @@
 {
-  "name": "Gusanitoxmega - Para Daniela",
-  "short_name": "Gusanito",
-  "description": "Juego del gusanito con mensaje especial y motivacional.",
-  "start_url": "./index.html",
-  "scope": "./",
-  "id": "com.gusanitoxmega.daniela",
+  "name": "Gusanitoxmega",
+  "short_name": "GusanitoX",
+  "description": "El juego de la serpiente definitivo con niveles y aventuras epicas",
+  "start_url": ".",
   "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#4cc9f0",
   "orientation": "portrait",
-  "background_color": "#101820",
-  "theme_color": "#39ff88",
-  "categories": ["games", "entertainment"],
   "icons": [
     {
       "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
       "src": "icon-512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
+      "type": "image/png"
     },
     {
       "src": "icon-512-maskable.png",
@@ -33,10 +29,23 @@
   "screenshots": [
     {
       "src": "screenshot1.png",
-      "sizes": "640x1136",
+      "sizes": "1280x720",
       "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Pantalla principal del juego"
+      "form_factor": "wide",
+      "label": "Gusanitoxmega - Juego de la Serpiente"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "handle_links": "preferred",
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+  "display_override": ["window-controls-overlay", "standalone", "browser"],
+  "protocol_handlers": [
+    {
+      "protocol": "web+gusanitoxmega",
+      "url": "/open?url=%s"
     }
   ]
 }
