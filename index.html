@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#2c3e50">
+  <title>Snake Game PWA</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    body {
+      background-color: #1a1a2e;
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      touch-action: none;
+      overflow: hidden;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    h1 {
+      font-size: 1.8rem;
+      color: #4eef90;
+      text-shadow: 0 0 10px rgba(78, 239, 144, 0.4);
+    }
+    .score-board {
+      font-size: 1.2rem;
+      margin-top: 5px;
+      color: #e0e0e0;
+    }
+    .canvas-container {
+      position: relative;
+      border: 4px solid #16213e;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      background-color: #0f3460;
+    }
+    canvas {
+      display: block;
+      border-radius: 8px;
+    }
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(3, 60px);
+      grid-template-rows: repeat(2, 60px);
+      gap: 10px;
+      margin-top: 15px;
+      justify-content: center;
+    }
+    .btn {
+      background: #16213e;
+      color: #4eef90;
+      border: 2px solid #4eef90;
+      border-radius: 50%;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      touch-action: manipulation;
+    }
+    .btn:active {
+      background: #4eef90;
+      color: #16213e;
+      transform: scale(0.95);
+    }
+    .btn-up { grid-column: 2; grid-row: 1; }
+    .btn-left { grid-column: 1; grid-row: 2; }
+    .btn-down { grid-column: 2; grid-row: 2; }
+    .btn-right { grid-column: 3; grid-row: 2; }
+
+    @media (min-width: 768px) {
+      .controls {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Snake PWA</h1>
+    <div class="score-board">Puntaje: <span id="score">0</span></div>
+  </div>
+
+  <div class="canvas-container">
+    <canvas id="gameCanvas" width="360" height="360"></canvas>
+  </div>
+
+  <div class="controls">
+    <button class="btn btn-up" id="btnUp">▲</button>
+    <button class="btn btn-left" id="btnLeft">◄</button>
+    <button class="btn btn-down" id="btnDown">▼</button>
+    <button class="btn btn-right" id="btnRight">►</button>
+  </div>
+
+  <script src="game.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(reg => console.log('Service Worker registrado con éxito'))
+          .catch(err => console.error('Error registrando Service Worker:', err));
+      });
+    }
+  </script>
+</body>
+</html>
